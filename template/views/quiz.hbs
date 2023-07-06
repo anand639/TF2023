@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        font-family: "Titillium Web", sans-serif;
+      }
+
+      body {
+        background-color: #ededed;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .conatainer {
+        background-color: #f2f2f2;
+        width: 600px;
+        box-shadow: 0px 0px 20px #046d5f;
+        padding: 20px;
+      }
+      .questioncontainer {
+        background-color: #eeeeee;
+      }
+
+      h1 {
+        font-size: 4rem;
+        text-align: center;
+      }
+
+      #nextBtn {
+        display: none;
+      }
+
+      #correctAnswer {
+        display: none;
+      }
+
+      .btn {
+        background-color: #068e7c;
+        height: 3rem;
+        font-size: 1rem;
+        margin: 20px;
+        width: 100px;
+        padding: 10px;
+        color: #ffffff;
+        font-weight: 600;
+        font-family: "Mulish", sans-serif;
+        border-radius: 5px;
+        border: 1px solid #068e7c;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn:hover {
+        background-color: transparent;
+        color: #068e7c;
+        transform: scale(0.8);
+      }
+
+      input[type="text"] {
+        margin: auto;
+        width: 95%;
+        margin: auto;
+        padding: 10px;
+        margin-bottom: 10px;
+        color: #009984;
+        border: solid 3px #00a28c;
+        font-size: 1.2rem;
+      }
+      input[type="text"]:focus {
+        outline: #068e7c;
+        border: solid 3px #068e7c;
+      }
+
+      .question {
+        font-size: 1.5rem;
+        color: #068e7c;
+        font-weight: 900;
+        padding-bottom: 40px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 5rem;
+        color: #4c44ad;
+        font-weight: 900;
+      }
+
+      div {
+        color: #068e7c;
+        font-size: 1.2rem;
+      }
+      a {
+        color: white;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #068e7c;
+        text-decoration: none;
+      }
+
+      #back {
+        display: none;
+      }
+      @media screen and (max-width: 480px) and (orientation: portrait) {
+        .container {
+          width: 280px;
+        }
+      }
+
+      @media screen and (max-width: 600px) and (orientation: portrait) {
+        .container {
+          width: 400px;
+        }
+      }
+
+      @media screen and (max-width: 450px) and (orientation: portrait) {
+        .container {
+          width: 300px;
+        }
+      }
+      @media screen and (max-width: 370px) and (orientation: portrait) {
+        .container {
+          width: 270px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="conatainer">
+      <h1>Quiz</h1>
+      <div class="questioncontainer">
+        <div class="question" id="question"></div>
+        <input type="text" placeholder="Enter Your Answer" id="answer" />
+        <h3 id="correctAnswer">Hurrah! Correct Answer🎉</h3>
+        <div id="incorrectAnswer"></div>
+        <div id="yourlifelifeline"></div>
+        <div id="score"></div>
+      </div>
+      <div class="buttons">
+        <button class="btn" id="submitBtn">Submit</button>
+        <button class="btn" id="skipBtn">Skip</button>
+        <button class="btn" id="hintBtn">Hint</button>
+        <button class="btn" id="nextBtn">Next</button>
+        <button class="btn" id="back"><a href="">Back</a></button>
+      </div>
+      <div class="hintsus">
+        <div id="hint"></div>
+      </div>
+      <div class="lifelines">
+        <div id="lifelineCount">Your Lifelines:- 5</div>
+        <p id="timer"></p>
+      </div>
+    </div>
+    <script>
+      var questions = [
+        { question: "Question 1", answer: "answer 1", hint: "Hint 1" },
+        { question: "Question 2", answer: "Answer 2", hint: "Hint 2" },
+        { question: "Question 3", answer: "Answer 3", hint: "Hint 3" },
+        { question: "Question 4", answer: "Answer 4", hint: "Hint 4" },
+        { question: "Question 5", answer: "Answer 5", hint: "Hint 5" },
+        { question: "Question 6", answer: "Answer 6", hint: "Hint 6" },
+        { question: "Question 7", answer: "Answer 7", hint: "Hint 7" },
+        { question: "Question 8", answer: "Answer 8", hint: "Hint 8" },
+        { question: "Question 9", answer: "Answer 9", hint: "Hint 9" },
+        { question: "Question 10", answer: "Answer 10", hint: "Hint 10" },
+      ];
+
+      var currentQuestionIndex = 0;
+      var lifelineCount = 5;
+      var hintUsed = false;
+      var timerInterval;
+
+      var questionElement = document.getElementById("question");
+      var answerElement = document.getElementById("answer");
+      var submitButton = document.getElementById("submitBtn");
+      var skipButton = document.getElementById("skipBtn");
+      var nextButton = document.getElementById("nextBtn");
+      var hintButton = document.getElementById("hintBtn");
+      var backButton = document.getElementById("back");
+      var lifelineCountElement = document.getElementById("lifelineCount");
+      var timerElement = document.getElementById("timer");
+      var correctAnswerh = document.getElementById("correctAnswer");
+      var incorrectAnswerh = document.getElementById("incorrectAnswer");
+      var hintDisplay = document.getElementById("hint");
+      var scoreDisplay = document.getElementById("score");
+      var yourlifelifeline = document.getElementById("yourlifelifeline");
+      var score = 0;
+      var lifeline = 5;
+
+      function initializeQuiz() {
+        displayQuestion();
+
+        submitButton.addEventListener("click", checkAnswer);
+        skipButton.addEventListener("click", skipQuestion);
+        nextButton.addEventListener("click", nextQuestion);
+        hintButton.addEventListener("click", showHint);
+      }
+
+      function displayQuestion() {
+        questionElement.textContent = questions[currentQuestionIndex].question;
+        answerElement.value = "";
+      }
+
+      function checkAnswer() {
+        var userAnswer = answerElement.value.trim().toLowerCase();
+        var correctAnswer = questions[currentQuestionIndex].answer;
+        nextButton.style.display = "block";
+        skipButton.style.display = "none";
+        submitButton.style.display = "none";
+        hintButton.style.display = "none";
+
+        if (userAnswer === correctAnswer) {
+          score++;
+          correctAnswerh.style.display = "block";
+          // Award marks or update score
+        } else {
+          lifelineFun();
+          incooreec();
+        }
+      }
+
+      function incooreec() {
+        incorrectAnswerh.textContent = `Wrong Answer😔. The correct Answer is ${questions[currentQuestionIndex].answer}`;
+      }
+
+      function nextQuestion() {
+        goToNextQuestion();
+        nextButton.style.display = "none";
+        skipButton.style.display = "inline";
+        submitButton.style.display = "inline";
+        hintButton.style.display = "inline";
+        correctAnswerh.style.display = "none";
+        incorrectAnswerh.style.display = "none";
+        hintDisplay.style.display = "none";
+      }
+
+      function lifelineFun() {
+        lifeline--;
+        lifelineCountElement.textContent = `Your Lifelines:- ${lifeline}`;
+        if (lifeline === 0) {
+          yourlifelifeline.textContent = "Oh! Your lifelines are finished";
+          answerElement.style.display = "none";
+          nextButton.style.display = "none";
+          backButton.style.display = "block";
+          questionElement.style.display = "none";
+          submitButton.style.display = "none";
+          skipButton.style.display = "none";
+          hintButton.style.display = "none";
+          timerElement.style.display = "none";
+
+          scoreDisplay.textContent = `You scored ${score}`;
+        } else {
+        }
+      }
+
+      function showHint() {
+        if (hintUsed) {
+          alert("Hint can only be used once every 3 minutes.");
+          return;
+        }
+
+        hintDisplay.textContent = questions[currentQuestionIndex].hint;
+        hintUsed = true;
+        setTimeout(resetHint, 180000);
+      }
+
+      // Reset the hint after 3 minutes
+      function resetHint() {
+        hintDisplay.textContent = "";
+        hintUsed = false;
+      }
+
+      // Skip the current question
+      function skipQuestion() {
+        goToNextQuestion();
+      }
+
+      // Go to the next question
+      function goToNextQuestion() {
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex >= questions.length) {
+          scoreDisplay.textContent = `You scored ${score}`;
+          answerElement.style.display = "none";
+          nextButton.style.display = "none";
+          backButton.style.display = "block";
+          questionElement.style.display = "none";
+          submitButton.style.display = "none";
+          skipButton.style.display = "none";
+          hintButton.style.display = "none";
+          timerElement.style.display = "none";
+        } else {
+          displayQuestion();
+        }
+      }
+
+      initializeQuiz();
+    </script>
+  </body>
+</html>

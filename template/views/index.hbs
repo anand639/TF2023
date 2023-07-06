@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login For TF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@700&family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
+  <style>
+     @media screen and (max-width:470px)and (orientation:portrait){
+              .login-container{
+                width: 300px;
+                height: 100%;
+              }
+              .login-container h2{
+                font-size: 72px;
+              }
+            }
+
+
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      background-image: linear-gradient(to right top, #a3e4db, #92dfd4, #7fdacd, #6cd5c6, #56d0be, #49c4b4, #3ab9a9, #2aad9f, #299990, #298580, #29716f, #295e5e);
+
+    }
+    
+    .login-container {
+      max-width: 300px;
+      width: 300px;
+      margin: auto;
+      padding: 40px;
+      border: 2px solid rgba(225, 225, 225, .5);
+      background: transparent;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    }
+    
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffffff;
+      font-family: 'Titillium Web', sans-serif;
+      font-weight: 900;
+      font-size: 2.5rem;
+    }
+    
+   
+
+
+    .txt{
+    border-bottom:2px solid #E5D9B6;
+    margin: 30px 0;
+    position: relative;
+}
+.txt input{
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+
+
+.txt label{
+      font-weight: bold;
+      font-family: 'Titillium Web', sans-serif;
+      color: #9bf2e6;
+      font-size: 0.9rem;
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      transform: translateY(-50%);
+      transition: .5s; 
+}
+
+
+.txt span::before{
+    content: "";
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #ffffff;
+    transition: .5s;
+
+}
+
+.txt input:focus ~ label,
+.txt input:valid ~ label{
+    top: -5px;
+    color: #ffffff;
+
+}
+
+.txt input:focus,
+.txt input:valid{
+  color:  #ffffff;
+  font-size: 1.2rem;
+}
+
+.txt input:focus ~ span::before,
+.txt input:focus ~ span::before{
+    width: 100%;
+}
+.submit{
+  background-color: #ffffff;
+        height: 3rem;
+        font-size: 1rem;
+    padding: 10px;
+    color: #09dfc2;
+    font-weight: 600;
+    font-family: 'Mulish', sans-serif;
+    border-radius: 5px;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.submit:hover{
+  background-color: transparent;
+     color: #ffffff;
+     transform: scale(0.8);
+}
+  </style>
+</head>
+<body>
+  
+<div class="login-container">
+    <h2>Register</h2>
+    <form action="/quiz" method="POST"  class="con-form">
+        <div class="txt">
+            <input type="text"required name="name" autocomplete="off">
+            <span></span>
+            <label>Name</label>
+        </div>
+        <div class="txt">
+            <input type="email"required name="email" autocomplete="off">
+            <span></span>
+            <label>E-mail</label>
+            
+        </div>
+
+        <div class="txt">
+          <input type="text"required name="school" autocomplete="off">
+          <span></span>
+          <label>School Name</label>
+      </div>
+
+      <div class="txt">
+        <input type="text"required name="class" autocomplete="off">
+        <span></span>
+        <label>Class</label></div>
+      
+
+
+        <input type="submit" value="Take The Quiz" class="submit">
+    </form>
+  </div>
+
+  <script>
+
+  </script>
+</body>
+</html>
